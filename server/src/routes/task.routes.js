@@ -6,13 +6,14 @@ import {
     putTask,
     removeTask,
 } from "../controllers/task.controller.js";
+import { validateTask, validateTaskId } from "../middleware/validate.js";
 
 const router = Router();
 
 router.get("/", getTasks);
-router.get("/:id", getTask);
-router.post("/", postTask);
-router.put("/:id", putTask);
-router.delete("/:id", removeTask);
+router.get("/:id", validateTaskId, getTask);
+router.post("/", validateTask, postTask);
+router.put("/:id", validateTaskId, validateTask, putTask);
+router.delete("/:id", validateTaskId, removeTask);
 
 export default router;
