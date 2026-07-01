@@ -3,11 +3,13 @@ import cors from "cors";
 import taskRoutes from "./routes/task.routes.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import aiRoutes from "./routes/ai.routes.js";
+import authRoutes from "./routes/auth.routes.js";
 
 const app = express();
 
 app.use(cors({ origin: process.env.CLIENT_URL || "*" }));
 app.use(express.json());
+app.use("/api/auth", authRoutes);
 app.use("/api/ai", aiRoutes);
 
 app.get("/health", (req, res) => res.json({ status: "ok" }));

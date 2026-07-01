@@ -1,7 +1,7 @@
 import prisma from "../config/db.js";
 
-export const getAllTasks = async(filters = {}) => {
-    const where = {};
+export const getAllTasks = async(userId, filters = {}) => {
+    const where = { userId };
     if (filters.status) where.status = filters.status;
     if (filters.priority) where.priority = filters.priority;
 
@@ -11,18 +11,30 @@ export const getAllTasks = async(filters = {}) => {
     });
 };
 
-export const getTaskById = async(id) => {
-    return prisma.task.findUnique({ where: { id } });
+export const getTaskById = async(userId, id) => {
+    return prisma.task.findFirst({ where: { id, userId } });
 };
 
-export const createTask = async(data) => {
-    return prisma.task.create({ data });
+export const createTask = async(userId, data) => {
+    return prisma.task.create({ data: {...data, userId } });
 };
 
-export const updateTask = async(id, data) => {
+export const updateTask = async(userId, id, data) => {
+    const task = await prisma.task.findFirst({ where: { id, userId } });
+    if (!task) {
+        const err = new Error("Task not found");
+        err.status = 404;
+        throw err;
+    }
     return prisma.task.update({ where: { id }, data });
 };
 
-export const deleteTask = async(id) => {
+export const deleteTask = async(userId, id) => {
+    const task = await prisma.task.findFirst({ where: { id, userId } });
+    if (!task) {
+        const err = new Error("Task not found");
+        err.status = 404;
+        throw err;
+    }
     return prisma.task.delete({ where: { id } });
 };
