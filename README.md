@@ -4,7 +4,7 @@ A full-stack task management application with AI-powered task suggestions, secur
 
 **Live Demo:** *(https://task-manager-web-app-navy.vercel.app)*
 
-**Video Walkthrough:** *Add your Loom video URL here*
+**Video Walkthrough:** *(https://www.loom.com/share/7e5b9685ee6b488785826d7f6656bdc1)*
 
 ---
 
