@@ -1,5 +1,6 @@
 import * as authService from "../services/auth.service.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
+import { authCookieOptions, csrfCookieOptions } from "../utils/cookieOptions.js";
 
 export const register = asyncHandler(async(req, res) => {
     const { email, password } = req.body || {};
@@ -22,6 +23,20 @@ export const login = asyncHandler(async(req, res) => {
         return res.status(400).json({ message: "Email and password are required" });
     }
 
-    const result = await authService.loginUser(email, password);
-    res.status(200).json(result);
+    const { token, csrfToken, user } = await authService.loginUser(email, password);
+
+    res.cookie("token", token, authCookieOptions);
+    res.cookie("csrfToken", csrfToken, csrfCookieOptions);
+    res.status(200).json({ user });
+});
+
+export const logout = asyncHandler(async(req, res) => {
+    res.clearCookie("token", authCookieOptions);
+    res.clearCookie("csrfToken", csrfCookieOptions);
+    res.status(200).json({ message: "Logged out" });
+});
+
+export const me = asyncHandler(async(req, res) => {
+    // req.userId and req.userEmail are set by requireAuth
+    res.status(200).json({ user: { id: req.userId, email: req.userEmail } });
 });

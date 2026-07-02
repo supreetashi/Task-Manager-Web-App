@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
 import prisma from "../config/db.js";
 
 const SALT_ROUNDS = 10;
@@ -13,7 +14,6 @@ export const registerUser = async(email, password) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
-
     const user = await prisma.user.create({
         data: { email, password: hashedPassword },
     });
@@ -40,5 +40,7 @@ export const loginUser = async(email, password) => {
         process.env.JWT_SECRET, { expiresIn: "7d" }
     );
 
-    return { token, user: { id: user.id, email: user.email } };
+    const csrfToken = crypto.randomBytes(32).toString("hex");
+
+    return { token, csrfToken, user: { id: user.id, email: user.email } };
 };
