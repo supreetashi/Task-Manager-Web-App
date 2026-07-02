@@ -2,7 +2,7 @@
 
 A full-stack task management application with AI-powered task suggestions, secure JWT authentication using httpOnly cookies, CSRF protection, drag-and-drop Kanban board, and dark mode support.
 
-**Live Demo:** *Add your deployed Vercel URL here*
+**Live Demo:** *(https://task-manager-web-app-navy.vercel.app)*
 
 **Video Walkthrough:** *Add your Loom video URL here*
 
